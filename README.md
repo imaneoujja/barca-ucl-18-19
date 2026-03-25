@@ -73,6 +73,4 @@ The notebook is already executed with all outputs saved.
 
 ---
 
-## Hosting on GitHub Pages
-
-Push the repo to GitHub, go to Settings > Pages, and set the source to the root of the main branch. The `index.html` will be served directly.
+Chack the datastory at : https://imaneoujja.github.io/barca-ucl-18-19/
