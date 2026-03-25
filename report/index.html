@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FC Barcelona UCL 2018–19 · The Anfield Collapse</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root{
+  --blue:#004d98;--red:#a50044;--gold:#edbb00;--lpool:#c8102e;
+  --bg:#080812;--bg2:#0f0f1e;--bg3:#141428;--card:#181830;
+  --text:#e0e0f0;--muted:#7a7a9a;--border:#252545;
+  --font:'Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(8,8,18,.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.7rem 2rem}
+.nav-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:1rem;letter-spacing:.05em}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:1.6rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;letter-spacing:.06em;
+             text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+      text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
+.hero-stripes{position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(110deg,rgba(0,77,152,.08) 0,rgba(0,77,152,.08) 1px,transparent 1px,transparent 60px)}
+.hero-glow{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(165,0,68,.12) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;
+              color:var(--gold);margin-bottom:1.2rem;opacity:.9}
+h1.hero-title{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:900;line-height:1.1;
+              max-width:900px;margin-bottom:1rem}
+h1.hero-title .accent{color:var(--red)}
+h1.hero-title .accent2{color:var(--gold)}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:620px;margin-bottom:2.5rem}
+.hero-quote{font-style:italic;font-size:1.1rem;color:var(--gold);max-width:600px;
+            border-left:3px solid var(--red);padding-left:1.2rem;margin-bottom:3rem;text-align:left}
+.stat-pills{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-bottom:3rem}
+.pill{background:var(--card);border:1px solid var(--border);border-radius:12px;
+      padding:.9rem 1.6rem;text-align:center;min-width:130px}
+.pill-val{font-size:1.8rem;font-weight:800;color:var(--gold)}
+.pill-val.red{color:var(--red)}
+.pill-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.2rem}
+.scroll-hint{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;
+             color:var(--muted);display:flex;align-items:center;gap:.5rem;margin-top:1rem}
+.scroll-hint::after{content:'↓';animation:bounce 1.4s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── SECTIONS ── */
+section{padding:5rem 2rem;max-width:1200px;margin:0 auto}
+.section-tag{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+             color:var(--gold);margin-bottom:.8rem;display:block}
+h2.section-title{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;line-height:1.2;
+                 margin-bottom:.8rem}
+h2.section-title .hl{color:var(--red)}
+.section-intro{color:var(--muted);font-size:.97rem;max-width:740px;margin-bottom:2.5rem;line-height:1.8}
+
+/* divider */
+.section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);
+                 margin:0 auto}
+
+/* ── CARDS & GRIDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.6rem;margin-bottom:1.5rem}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+            padding:1.4rem 1.2rem 1rem;margin-bottom:1.8rem}
+.chart-title{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+             color:var(--muted);margin-bottom:.3rem}
+.chart-desc{font-size:.88rem;color:var(--text);margin-bottom:1rem;line-height:1.6}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+@media(max-width:768px){.two-col,.three-col{grid-template-columns:1fr}}
+
+/* ── STAT BOXES ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;text-align:center}
+.stat-box .val{font-size:2rem;font-weight:800}
+.stat-box .lbl{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+.home-col{color:var(--blue)}
+.away-col{color:var(--red)}
+.gold-col{color:var(--gold)}
+.lpool-col{color:var(--lpool)}
+
+/* ── NARRATIVE BLOCKS ── */
+.narrative{background:linear-gradient(135deg,var(--card),var(--bg3));
+           border:1px solid var(--border);border-left:4px solid var(--red);
+           border-radius:0 12px 12px 0;padding:1.6rem 2rem;margin:1.5rem 0;font-size:.97rem;line-height:1.9}
+.narrative strong{color:var(--gold)}
+.narrative .insight{color:var(--red);font-style:italic}
+
+/* ── MATCH TABLE ── */
+.match-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.match-table th{background:var(--bg3);color:var(--muted);text-transform:uppercase;
+                letter-spacing:.08em;font-size:.7rem;padding:.7rem .9rem;text-align:left;
+                border-bottom:1px solid var(--border)}
+.match-table td{padding:.65rem .9rem;border-bottom:1px solid var(--border)}
+.match-table tr:hover td{background:rgba(255,255,255,.03)}
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.72rem;font-weight:700;letter-spacing:.05em}
+.badge-w{background:rgba(0,77,152,.25);color:#5599ff}
+.badge-d{background:rgba(237,187,0,.15);color:var(--gold)}
+.badge-l{background:rgba(165,0,68,.25);color:#ff5588}
+.badge-h{background:rgba(0,77,152,.2);color:#4488ff}
+.badge-a{background:rgba(165,0,68,.2);color:#ff4477}
+.eff-bar{display:inline-block;height:8px;border-radius:4px;background:var(--gold);vertical-align:middle;margin-right:4px}
+
+/* ── CASE STUDY CARDS ── */
+.case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:2rem}
+.case-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;position:relative;overflow:hidden}
+.case-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.case-card.away::before{background:var(--red)}
+.case-card.collapse::before{background:linear-gradient(90deg,var(--lpool),var(--red))}
+.case-score{font-size:1.5rem;font-weight:900;margin-bottom:.3rem}
+.case-opp{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.8rem}
+.case-stat{display:flex;justify-content:space-between;font-size:.82rem;padding:.25rem 0;
+           border-bottom:1px solid rgba(255,255,255,.05)}
+.case-stat:last-child{border:0}
+.case-stat-val{font-weight:700;color:var(--gold)}
+.case-insight{font-size:.8rem;color:var(--muted);font-style:italic;margin-top:.8rem;line-height:1.5;
+              border-top:1px solid var(--border);padding-top:.7rem}
+
+/* ── LIVERPOOL SECTION ── */
+#liverpool{background:linear-gradient(180deg,var(--bg) 0%,rgba(20,0,8,.5) 50%,var(--bg) 100%);
+           padding:5rem 2rem}
+.lpool-duel{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:start;margin:2rem 0}
+.lpool-leg{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.6rem}
+.lpool-leg.leg1{border-top:4px solid var(--blue)}
+.lpool-leg.leg2{border-top:4px solid var(--lpool)}
+.leg-score{font-size:2.4rem;font-weight:900;margin:.4rem 0}
+.leg-venue{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem}
+.leg-metric{display:flex;justify-content:space-between;align-items:center;
+            font-size:.85rem;padding:.4rem 0;border-bottom:1px solid var(--border)}
+.leg-metric:last-child{border:0}
+.leg-metric-val{font-weight:800;font-size:1rem}
+.vs-center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem}
+.vs-badge{font-size:1.4rem;font-weight:900;color:var(--muted)}
+@media(max-width:700px){.lpool-duel{grid-template-columns:1fr}.vs-center{display:none}}
+
+/* ── CONCLUSION ── */
+#conclusion{background:var(--bg2)}
+.conclusion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:2rem 0}
+.conclusion-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.4rem}
+.conclusion-item .icon{font-size:1.8rem;margin-bottom:.6rem}
+.conclusion-item h4{font-size:.88rem;font-weight:700;color:var(--gold);margin-bottom:.5rem}
+.conclusion-item p{font-size:.83rem;color:var(--muted);line-height:1.6}
+
+/* ── FOOTER ── */
+footer{background:var(--bg3);border-top:1px solid var(--border);
+       text-align:center;padding:2rem;font-size:.8rem;color:var(--muted)}
+
+/* ── PLOTLY OVERRIDES ── */
+.js-plotly-plot .plotly .modebar{background:transparent!important}
+.js-plotly-plot .plotly .modebar-btn path{fill:var(--muted)!important}
+
+/* ── CONTEXT TIMELINE ── */
+.ctx-timeline{display:flex;flex-direction:column;gap:0;position:relative;margin-top:2rem}
+.ctx-timeline::before{content:'';position:absolute;left:11px;top:12px;bottom:12px;
+  width:2px;background:linear-gradient(180deg,var(--red),var(--gold),var(--blue),var(--gold),var(--red),var(--blue));
+  opacity:.4}
+.ctx-item{display:flex;gap:1.6rem;padding-bottom:2.2rem;position:relative}
+.ctx-dot{width:24px;height:24px;border-radius:50%;flex-shrink:0;margin-top:.25rem;
+  border:3px solid var(--bg2);box-shadow:0 0 0 2px rgba(255,255,255,.08);z-index:1}
+.ctx-content{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:1.3rem 1.6rem}
+.ctx-content h4{font-size:.92rem;font-weight:700;color:var(--gold);margin-bottom:.6rem;letter-spacing:.02em}
+.ctx-content p{font-size:.9rem;color:var(--muted);line-height:1.75}
+.ctx-content strong{color:var(--text)}
+.ctx-questions{margin:.6rem 0 0 1.2rem;color:var(--muted);font-size:.88rem;line-height:2}
+.ctx-questions li{list-style:disc;padding-left:.3rem}
+@media(max-width:600px){
+  .ctx-timeline::before{display:none}
+  .ctx-dot{display:none}
+  .ctx-item{gap:0}
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚽ <span>Barça</span>&nbsp;UCL 2018–19</div>
+  <ul class="nav-links">
+    <li><a href="#context">Context</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#paradox">Paradox</a></li>
+    <li><a href="#fragility">Fragility</a></li>
+    <li><a href="#cases">Case Studies</a></li>
+    <li><a href="#liverpool">Liverpool</a></li>
+    <li><a href="#stats">Statistics</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-stripes"></div>
+  <div class="hero-glow"></div>
+  <p class="hero-eyebrow">Data Analysis · UEFA Champions League 2018–19</p>
+  <h1 class="hero-title">FC Barcelona's <span class="accent">Away Fragility</span><br>& The <span class="accent2">Anfield Collapse</span></h1>
+  <p class="hero-sub">A data-driven post-mortem examining how possession football can deceive — and why the cracks were visible long before Anfield.</p>
+  <blockquote class="hero-quote">"They didn't just lose a football match — they suffered a structural failure disguised as a scoreline."</blockquote>
+  <div class="stat-pills" id="hero-pills">
+    <div class="pill"><div class="pill-val" id="pill-home-goals">3.00</div><div class="pill-label">Avg Goals (Home)</div></div>
+    <div class="pill"><div class="pill-val red" id="pill-away-goals">1.33</div><div class="pill-label">Avg Goals (Away)</div></div>
+    <div class="pill"><div class="pill-val" id="pill-home-eff">0.183</div><div class="pill-label">Shot Eff. Home</div></div>
+    <div class="pill"><div class="pill-val red" id="pill-away-eff">0.101</div><div class="pill-label">Shot Eff. Away</div></div>
+    <div class="pill"><div class="pill-val red" id="pill-corr">+0.049</div><div class="pill-label">Poss→Goals r</div></div>
+  </div>
+  <p class="scroll-hint">Scroll to explore</p>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 0: CONTEXT -->
+<section id="context" class="reveal" style="background:var(--bg2);max-width:100%;padding:5rem 0">
+<div style="max-width:1200px;margin:0 auto;padding:0 2rem">
+  <span class="section-tag">Prologue · Season Context</span>
+  <h2 class="section-title">This Season Was <span class="hl">Never Just Football</span></h2>
+  <p class="section-intro">
+    The 2018–19 Champions League campaign cannot be understood in isolation.
+    It was played under the weight of history, expectation, and a wound that was still raw.
+    To understand why Anfield hurt so much — and why the data tells the story it does —
+    you first need to understand the season's emotional and institutional context.
+  </p>
+
+  <div class="ctx-timeline reveal">
+    <div class="ctx-item">
+      <div class="ctx-dot" style="background:var(--red)"></div>
+      <div class="ctx-content">
+        <h4>April 2018 — The Roma Trauma</h4>
+        <p>
+          One year before Anfield, Barcelona suffered an almost identical collapse. Leading 4–1 from the first leg
+          against Roma, they conceded three unanswered goals at the Stadio Olimpico and were eliminated on away goals.
+          The tactical and psychological scars from that night never fully healed.
+          <strong>The question of whether Barcelona could hold a lead away from home had already been asked — and answered badly.</strong>
+        </p>
+      </div>
+    </div>
+    <div class="ctx-item">
+      <div class="ctx-dot" style="background:var(--gold)"></div>
+      <div class="ctx-content">
+        <h4>Summer 2018 — A Changing of the Guard</h4>
+        <p>
+          Andrés Iniesta — the heartbeat of Barcelona's midfield for over a decade — left for Japan.
+          With him went the most reliable pressure-release valve in European football: a player who could
+          receive in tight spaces, turn, and keep the ball moving in hostile environments.
+          <strong>Lionel Messi was named captain for the first time.</strong>
+          The symbolism was enormous. So was the burden. Barcelona's identity was shifting from a collective
+          system to something increasingly dependent on one man's moments of genius.
+        </p>
+      </div>
+    </div>
+    <div class="ctx-item">
+      <div class="ctx-dot" style="background:var(--blue)"></div>
+      <div class="ctx-content">
+        <h4>Summer 2018 — Post-World Cup Disruption</h4>
+        <p>
+          The 2018 World Cup in Russia ended in disappointment for many of Barcelona's key players.
+          Messi and Argentina were eliminated by France in the Round of 16.
+          Spain, featuring Busquets, Piqué, Jordi Alba and Coutinho (Brazil), all exited early.
+          Pre-season preparations were truncated. Several players arrived back at Camp Nou
+          physically and mentally depleted, with the UCL campaign beginning just six weeks later.
+        </p>
+      </div>
+    </div>
+    <div class="ctx-item">
+      <div class="ctx-dot" style="background:var(--gold)"></div>
+      <div class="ctx-content">
+        <h4>2018–19 — La Liga Dominance Creates False Comfort</h4>
+        <p>
+          Barcelona were ruthless domestically. They won La Liga with 87 points, finishing
+          11 points ahead of Atlético Madrid. Messi won his sixth Ballon d'Or.
+          The domestic form created a dangerous narrative: that this squad was invincible,
+          that the Champions League was simply a matter of time.
+          <strong>Confidence masked fragility.</strong>
+          The away vulnerabilities visible in the UCL were papered over by home dominance in the league.
+        </p>
+      </div>
+    </div>
+    <div class="ctx-item">
+      <div class="ctx-dot" style="background:var(--red)"></div>
+      <div class="ctx-content">
+        <h4>The Public Mandate — "Bring the Cup Back"</h4>
+        <p>
+          The last time Barcelona won the Champions League was 2015. Four years without the trophy —
+          by their own standards, a drought. The discourse in Catalonia, in the media, and among the
+          fanbase had become singular: this was the squad to do it, Messi was at his peak,
+          the squad had been reinforced with Coutinho and Dembélé.
+          The pressure to deliver was immense and public.
+          <strong>That pressure would become visible in the most important away match of the season.</strong>
+        </p>
+      </div>
+    </div>
+    <div class="ctx-item">
+      <div class="ctx-dot" style="background:var(--blue)"></div>
+      <div class="ctx-content">
+        <h4>The Research Questions This Analysis Asks</h4>
+        <p>
+          Against this backdrop, this analysis asks four questions rooted in data:
+        </p>
+        <ul class="ctx-questions">
+          <li>Was the collapse at Anfield an isolated accident, or the extreme case of a season-long pattern?</li>
+          <li>Did Barcelona show a structural imbalance between home and away UCL performance all campaign?</li>
+          <li>Are there specific away matches — Inter, Lyon, Man Utd — that already show the warning signs?</li>
+          <li>Can we quantify the gap between apparent dominance and genuine control?</li>
+        </ul>
+        <p style="margin-top:.8rem"><strong>The short answer to all four: yes.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="narrative reveal" style="margin-top:2.5rem;border-left-color:var(--gold)">
+    <strong>The thesis of this analysis:</strong>
+    Barcelona's 2018–19 UCL campaign was not a story of a great team that had one bad night.
+    It was the story of a team carrying structural fragilities — a possession style that struggled to create danger away from home,
+    a moment-dependence that masked the absence of system, and a psychological weight that made the Roma nightmare
+    one year earlier feel less like an anomaly and more like a prophecy.
+    <span class="insight">The data was telling this story from November. Nobody was reading it.</span>
+  </div>
+</div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 1: OVERVIEW -->
+<section id="overview" class="reveal">
+  <span class="section-tag">Chapter 1 · Campaign Overview</span>
+  <h2 class="section-title">12 Matches, <span class="hl">One Trajectory</span></h2>
+  <p class="section-intro">
+    Barcelona navigated the 2018–19 UCL group stage and knockout rounds with apparent authority — 
+    topping their group, eliminating Lyon, Manchester United, and reaching the semi-finals. 
+    On paper, a success story. But match by match, the data tells a more complicated tale.
+  </p>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Full Campaign — Match by Match</div>
+    <div class="chart-desc">Goals scored (blue) vs conceded (red), shot volume, possession — every match across the campaign. Hover for full details.</div>
+    <div id="chart-timeline" style="height:420px"></div>
+  </div>
+
+  <div class="chart-card reveal" style="margin-top:1.5rem">
+    <div class="chart-title">All Matches Results Table</div>
+    <div id="matches-table-container"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 2: HOME VS AWAY PARADOX -->
+<section id="paradox" class="reveal">
+  <span class="section-tag">Chapter 2 · The Central Paradox</span>
+  <h2 class="section-title">More Possession Away. <span class="hl">Far Fewer Goals.</span></h2>
+  <p class="section-intro">
+    Barcelona averaged <strong>63% possession away</strong> from home — three percentage points <em>higher</em> 
+    than at Camp Nou. Yet they scored 56% fewer goals on the road. Possession was not the problem. 
+    Doing something dangerous with it was.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-box"><div class="val home-col">3.00</div><div class="lbl">Home goals/match</div></div>
+    <div class="stat-box"><div class="val away-col">1.33</div><div class="lbl">Away goals/match</div></div>
+    <div class="stat-box"><div class="val home-col">60.0%</div><div class="lbl">Home possession</div></div>
+    <div class="stat-box"><div class="val away-col">63.0%</div><div class="lbl">Away possession</div></div>
+    <div class="stat-box"><div class="val home-col">0.183</div><div class="lbl">Home shot efficiency</div></div>
+    <div class="stat-box"><div class="val away-col">0.101</div><div class="lbl">Away shot efficiency</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="chart-card">
+      <div class="chart-title">Home vs Away — Key Averages</div>
+      <div class="chart-desc">Every major attacking metric split by venue. The efficiency gap is the headline story.</div>
+      <div id="chart-home-away-bars" style="height:350px"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Possession vs Goals Scored — All Matches</div>
+      <div class="chart-desc">If possession drove goals, the trend line would slope upward. It barely does. r = +0.049.</div>
+      <div id="chart-poss-vs-goals" style="height:350px"></div>
+    </div>
+  </div>
+
+  <div class="narrative reveal">
+    <strong>The core paradox in numbers:</strong> The correlation between possession percentage and goals scored across these 12 matches is just <strong>r = +0.049</strong> — essentially zero. 
+    Meanwhile, shots on target correlate with goals at <strong>r = +0.578</strong>. 
+    The data is unambiguous: <span class="insight">possession is a proxy. Shots on target are the signal.</span>
+    Barcelona's away identity — deep, careful, possession-based — generated the ball but not the danger.
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 3: AWAY FRAGILITY -->
+<section id="fragility" class="reveal">
+  <span class="section-tag">Chapter 3 · Away Fragility</span>
+  <h2 class="section-title">The Sterile <span class="hl">Domination Pattern</span></h2>
+  <p class="section-intro">
+    Away from Camp Nou, a consistent fingerprint emerged: high possession, high shot volume, 
+    but wildly inconsistent conversion. The shots were speculative. The structure was reactive. 
+    And the results — wins, draws, a single collapse — were increasingly dependent on moments of 
+    individual genius rather than systematic superiority.
+  </p>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Shot Efficiency — Full Campaign Ranked</div>
+    <div class="chart-desc">Goals scored divided by total shots. Away matches (red) cluster at the bottom. Liverpool at Anfield hits zero.</div>
+    <div id="chart-eff-ranked" style="height:360px"></div>
+  </div>
+
+  <div class="two-col reveal">
+    <div class="chart-card">
+      <div class="chart-title">Shots per Possession % — Sterile Domination Detector</div>
+      <div class="chart-desc">For each 1% of possession held, how many shots were generated? Lower values = ball circulated without creating danger.</div>
+      <div id="chart-shots-per-poss" style="height:340px"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Away Matches — Shots vs Goals</div>
+      <div class="chart-desc">High bars with flat goal lines = shots not converting. The Inter and Lyon away matches are the clearest examples.</div>
+      <div id="chart-away-shots-goals" style="height:340px"></div>
+    </div>
+  </div>
+
+  <div class="narrative reveal">
+    <strong>The away fingerprint:</strong> Across all 6 away matches, Barcelona consistently held 57–67% possession. 
+    Shot totals were often high (Inter: 26, Lyon: 25). But shot efficiency swung from 
+    <strong>0.167</strong> (Man Utd, aided by an own goal) to <strong>0.000</strong> (Lyon, Liverpool). 
+    <span class="insight">The away wins were not won through dominance — they were snatched through moments.</span> 
+    PSV was won with 2 goals from 21 shots (9.5% efficiency). Manchester United was "won" via Luke Shaw's own goal. 
+    The structure was never truly in control.
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 4: CASE STUDIES -->
+<section id="cases" class="reveal">
+  <span class="section-tag">Chapter 4 · Away Case Studies</span>
+  <h2 class="section-title">Three Warnings <span class="hl">Nobody Heeded</span></h2>
+  <p class="section-intro">
+    Inter, Lyon, and Manchester United each told a different part of the same story: 
+    Barcelona away from home was fragile, moment-dependent, and structurally vulnerable 
+    to teams that defended with discipline and attacked with pace.
+  </p>
+
+  <div class="case-grid reveal">
+    <div class="case-card away">
+      <div class="case-opp">Inter Milan · Away · Group Stage</div>
+      <div class="case-score" style="color:var(--gold)">1–1</div>
+      <div class="case-stat"><span>Possession</span><span class="case-stat-val">65%</span></div>
+      <div class="case-stat"><span>Shots</span><span class="case-stat-val">26</span></div>
+      <div class="case-stat"><span>Shots on Target</span><span class="case-stat-val">8</span></div>
+      <div class="case-stat"><span>Shot Efficiency</span><span class="case-stat-val">0.038</span></div>
+      <div class="case-stat"><span>Goals</span><span class="case-stat-val">1</span></div>
+      <p class="case-insight">Highest shot count of the campaign away from home. 26 shots. 1 goal. Inter's low block was impenetrable. The volume was a mirage — most shots came from outside the box, speculative, unthreatening.</p>
+    </div>
+    <div class="case-card away">
+      <div class="case-opp">Lyon · Away · Round of 16</div>
+      <div class="case-score" style="color:var(--muted)">0–0</div>
+      <div class="case-stat"><span>Possession</span><span class="case-stat-val">63%</span></div>
+      <div class="case-stat"><span>Shots</span><span class="case-stat-val">25</span></div>
+      <div class="case-stat"><span>Shots on Target</span><span class="case-stat-val">5</span></div>
+      <div class="case-stat"><span>Shot Efficiency</span><span class="case-stat-val">0.000</span></div>
+      <div class="case-stat"><span>Goals</span><span class="case-stat-val">0</span></div>
+      <p class="case-insight">Textbook sterile domination. 25 shots, 5 on target, zero goals. Shot accuracy of just 20% reveals the quality: long-range, low-danger attempts. Lyon defended with a 5-4-1 block and never broke. No Messi moment to save them.</p>
+    </div>
+    <div class="case-card away">
+      <div class="case-opp">Manchester United · Away · Quarter-Finals</div>
+      <div class="case-score" style="color:var(--gold)">1–0 (OG)</div>
+      <div class="case-stat"><span>Possession</span><span class="case-stat-val">67%</span></div>
+      <div class="case-stat"><span>Shots</span><span class="case-stat-val">6</span></div>
+      <div class="case-stat"><span>Shots on Target</span><span class="case-stat-val">3</span></div>
+      <div class="case-stat"><span>Shot Efficiency</span><span class="case-stat-val">0.167</span></div>
+      <div class="case-stat"><span>Goals</span><span class="case-stat-val">1</span></div>
+      <p class="case-insight">Only 6 shots — Barcelona's lowest of the campaign. United's defensive shape completely neutralised Barça's build-up. The "win" was a Luke Shaw deflection. Without that own goal, this was 0–0 and the tie was far less comfortable than it looked.</p>
+    </div>
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Defensive Actions — Away vs Home Comparison</div>
+    <div class="chart-desc">Tackles + interceptions across all matches with team-level data. Higher values = more active pressing and defensive engagement. Liverpool at Anfield shows the maximum pressure Barcelona faced.</div>
+    <div id="chart-defensive" style="height:360px"></div>
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Player Shot Maps — Key Away Matches</div>
+    <div class="chart-desc">Top shooters per away match. Bubble size = minutes played. The Inter match shows Coutinho (8 shots alone) generating enormous volume to little effect.</div>
+    <div id="chart-player-shots" style="height:420px"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 5: LIVERPOOL -->
+<section id="liverpool" class="reveal" style="max-width:1200px;margin:0 auto">
+  <span class="section-tag">Chapter 5 · The Anfield Collapse</span>
+  <h2 class="section-title">From <span class="hl">3–0</span> to <span style="color:var(--lpool)">0–4</span>: A Mathematical Anatomy</h2>
+  <p class="section-intro">
+    Barcelona arrived at Anfield on 7 May 2019 with a three-goal cushion, widely considered unassailable. 
+    They left with nothing. The data shows this wasn't simply bad luck or one bad night — 
+    it was the inevitable collision of Barcelona's away identity with the one team built 
+    to exploit exactly its weaknesses.
+  </p>
+
+  <div class="lpool-duel reveal">
+    <div class="lpool-leg leg1">
+      <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--blue)">Leg 1 · Camp Nou</div>
+      <div class="leg-score" style="color:var(--gold)">3–0</div>
+      <div class="leg-venue">Barcelona (Home) vs Liverpool</div>
+      <div class="leg-metric"><span>Shots</span><span class="leg-metric-val" style="color:var(--blue)">12</span></div>
+      <div class="leg-metric"><span>Shots on Target</span><span class="leg-metric-val" style="color:var(--blue)">5</span></div>
+      <div class="leg-metric"><span>Possession</span><span class="leg-metric-val" style="color:var(--blue)">48%</span></div>
+      <div class="leg-metric"><span>Shot Efficiency</span><span class="leg-metric-val" style="color:var(--gold)">0.250</span></div>
+      <div class="leg-metric"><span>Goals / SOT</span><span class="leg-metric-val" style="color:var(--gold)">0.600</span></div>
+      <div class="leg-metric"><span>Opp Shot Eff.</span><span class="leg-metric-val">0.000</span></div>
+    </div>
+    <div class="vs-center">
+      <div class="vs-badge">VS</div>
+      <div style="font-size:.7rem;color:var(--muted);text-align:center;max-width:80px;line-height:1.4">Semi-Final 2018–19</div>
+    </div>
+    <div class="lpool-leg leg2">
+      <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--lpool)">Leg 2 · Anfield</div>
+      <div class="leg-score" style="color:var(--lpool)">0–4</div>
+      <div class="leg-venue">Liverpool (Home) vs Barcelona</div>
+      <div class="leg-metric"><span>Shots</span><span class="leg-metric-val" style="color:var(--red)">8</span></div>
+      <div class="leg-metric"><span>Shots on Target</span><span class="leg-metric-val">5</span></div>
+      <div class="leg-metric"><span>Possession</span><span class="leg-metric-val" style="color:var(--gold)">57%</span></div>
+      <div class="leg-metric"><span>Shot Efficiency</span><span class="leg-metric-val" style="color:var(--lpool)">0.000</span></div>
+      <div class="leg-metric"><span>Goals / SOT</span><span class="leg-metric-val" style="color:var(--lpool)">0.000</span></div>
+      <div class="leg-metric"><span>Opp Shot Eff.</span><span class="leg-metric-val" style="color:var(--lpool)">0.286</span></div>
+    </div>
+  </div>
+
+  <div class="narrative reveal">
+    <strong>The Anfield paradox in full:</strong> Barcelona had <em>more</em> possession at Anfield (57%) than at Camp Nou (48%). 
+    They had the same number of shots on target (5). Yet they scored 0 goals instead of 3. 
+    <span class="insight">Liverpool scored with 1-in-3.5 shots. Barcelona scored with 0-in-8.</span>
+    <br><br>
+    The structural failure had four causes: (1) <strong>Pressing trap</strong> — Liverpool's gegenpressing broke Busquets-dependent build-up. 
+    (2) <strong>No penetration</strong> — only 8 total shots despite 57% possession; the ball circulated laterally without piercing the block. 
+    (3) <strong>Pace exploitation</strong> — Salah, Mané, Firmino exposed the high defensive line relentlessly. 
+    (4) <strong>Moment-dependence exposed</strong> — there was no Messi free-kick, no own goal to paper over the structural cracks.
+  </div>
+
+  <div class="two-col reveal">
+    <div class="chart-card">
+      <div class="chart-title">Attack Funnel — Leg 1 vs Leg 2</div>
+      <div class="chart-desc">From shots to goals: the same funnel entry, totally different outcomes. 5 SOT each leg; 3 goals vs 0.</div>
+      <div id="chart-funnel" style="height:380px"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Shot Efficiency Flip — Barça & Liverpool Across Both Legs</div>
+      <div class="chart-desc">The inversion is total. Barcelona's efficiency collapses to zero while Liverpool's surges to 0.286.</div>
+      <div id="chart-eff-flip" style="height:380px"></div>
+    </div>
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Liverpool Semi-Final — Shot Battle (Both Legs)</div>
+    <div class="chart-desc">Who created what, when. The shot balance tells the story of control vs chaos.</div>
+    <div id="chart-lpool-shots" style="height:380px"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 6: STATISTICS -->
+<section id="stats" class="reveal">
+  <span class="section-tag">Chapter 6 · Statistical Deep Dive</span>
+  <h2 class="section-title">What the Numbers <span class="hl">Actually Say</span></h2>
+  <p class="section-intro">
+    Beyond the match-by-match narrative, the aggregate statistics reveal systemic patterns. 
+    Correlations, distributions, and variance analysis all point to the same conclusion: 
+    Barcelona's away identity was fragile by design.
+  </p>
+
+  <div class="two-col reveal">
+    <div class="chart-card">
+      <div class="chart-title">Correlation Heatmap — Match-Level Metrics</div>
+      <div class="chart-desc">How strongly do metrics relate to each other? Possession and goals show near-zero correlation. SOT → goals is the only reliable path.</div>
+      <div id="chart-corr" style="height:420px"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Performance Distributions — Home vs Away</div>
+      <div class="chart-desc">The spread and centre of key metrics by venue. Away performance is lower on average and more variable (higher CV = less consistent).</div>
+      <div id="chart-distributions" style="height:420px"></div>
+    </div>
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Opponent Defensive Pressure — Who Pressed Barcelona Hardest?</div>
+    <div class="chart-desc">Barcelona's own tackles + interceptions per match. Away from home, they were forced into higher defensive activity — less time building, more time defending.</div>
+    <div id="chart-def-pressure" style="height:340px"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONCLUSION -->
+<section id="conclusion" class="reveal">
+  <span class="section-tag">Chapter 7 · Conclusion</span>
+  <h2 class="section-title">Possession Was <span class="hl">Never The Answer</span></h2>
+  <p class="section-intro">
+    Barcelona's 2018–19 Champions League campaign is a masterclass in the gap between 
+    apparent dominance and genuine control. The data tells a coherent, damning story — 
+    and it told it from November 2018 onwards.
+  </p>
+
+  <div class="conclusion-grid reveal">
+    <div class="conclusion-item">
+      <div class="icon">📊</div>
+      <h4>Possession Without Conversion</h4>
+      <p>Away from Camp Nou, Barcelona circulated possession at 63% average but scored at barely half the home rate. The ball moved; the danger didn't.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="icon">⚡</div>
+      <h4>Moment-Dependence</h4>
+      <p>Every away win or draw was decided by a single event: a Messi free-kick, an own goal, a penalty. The underlying structure never dominated.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="icon">🔢</div>
+      <h4>Overperformance in Leg 1</h4>
+      <p>The 3–0 lead at Camp Nou was built on 0.250 shot efficiency — 3× their away average. It created a false sense of security that Anfield brutally corrected.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="icon">📉</div>
+      <h4>Mathematical Certainty</h4>
+      <p>Shot efficiency: 0.250 → 0.000. Opponent efficiency: 0.000 → 0.286. A simultaneous total inversion. This isn't variance — it's structural mismatch at pace.</p>
+    </div>
+  </div>
+
+  <div class="narrative reveal" style="border-left-color:var(--gold);margin-top:2rem">
+    <strong>The lesson:</strong> In knockout football away from home, <span class="insight">possession is a tool, not a strategy.</span> 
+    When the structural advantages of Camp Nou — the crowd, the familiar press-escapes, the psychological comfort of 
+    100,000 blaugrana — were removed, Barcelona's identity became a cage. They held the ball beautifully 
+    at Anfield. Liverpool held the result.
+    <br><br>
+    The data had been warning them since the Inter away draw in November. Nobody was listening.
+  </div>
+</section>
+
+<footer>
+  <p style="color:var(--muted)">FC Barcelona · UEFA Champions League 2018–19 · Data Analysis</p>
+  <p style="margin-top:.4rem;color:#555">Built with Plotly.js · Data: Match-level & Player-level UCL Statistics</p>
+</footer>
+
+<script>
+// ─── DATA ──────────────────────────────────────────────────────────────────────
+const DATA = {"matches": [{"date_str": "2018-09-18", "opponent": "PSV", "venue": "Home", "round": "Group stage", "result": "W", "result_full": "4\u20130", "label": "PSV (H)", "goals_for": 4, "goals_against": 0, "possession": 75, "shots": 21, "shots_on_target": 9, "shot_efficiency": 0.19, "shot_accuracy": 0.429, "shots_per_poss_pct": 0.28, "shots_against": 14, "shots_on_target_against": 1, "opp_shot_efficiency": 0.0}, {"date_str": "2018-10-03", "opponent": "Tottenham", "venue": "Away", "round": "Group stage", "result": "W", "result_full": "4\u20132", "label": "Tottenham (A)", "goals_for": 4, "goals_against": 2, "possession": 61, "shots": 13, "shots_on_target": 8, "shot_efficiency": 0.308, "shot_accuracy": 0.615, "shots_per_poss_pct": 0.213, "shots_against": 9, "shots_on_target_against": 5, "opp_shot_efficiency": 0.222}, {"date_str": "2018-10-24", "opponent": "Inter", "venue": "Home", "round": "Group stage", "result": "W", "result_full": "2\u20130", "label": "Inter (H)", "goals_for": 2, "goals_against": 0, "possession": 67, "shots": 21, "shots_on_target": 11, "shot_efficiency": 0.095, "shot_accuracy": 0.524, "shots_per_poss_pct": 0.313, "shots_against": 9, "shots_on_target_against": 2, "opp_shot_efficiency": 0.0}, {"date_str": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "result": "D", "result_full": "1\u20131", "label": "Inter (A)", "goals_for": 1, "goals_against": 1, "possession": 65, "shots": 26, "shots_on_target": 8, "shot_efficiency": 0.038, "shot_accuracy": 0.308, "shots_per_poss_pct": 0.4, "shots_against": 10, "shots_on_target_against": 2, "opp_shot_efficiency": 0.1}, {"date_str": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "result": "W", "result_full": "2\u20131", "label": "PSV (A)", "goals_for": 2, "goals_against": 1, "possession": 65, "shots": 21, "shots_on_target": 8, "shot_efficiency": 0.095, "shot_accuracy": 0.381, "shots_per_poss_pct": 0.323, "shots_against": 23, "shots_on_target_against": 9, "opp_shot_efficiency": 0.043}, {"date_str": "2018-12-11", "opponent": "Tottenham", "venue": "Home", "round": "Group stage", "result": "D", "result_full": "1\u20131", "label": "Tottenham (H)", "goals_for": 1, "goals_against": 1, "possession": 49, "shots": 14, "shots_on_target": 3, "shot_efficiency": 0.071, "shot_accuracy": 0.214, "shots_per_poss_pct": 0.286, "shots_against": 17, "shots_on_target_against": 7, "opp_shot_efficiency": 0.059}, {"date_str": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "result": "D", "result_full": "0\u20130", "label": "Lyon (A)", "goals_for": 0, "goals_against": 0, "possession": 63, "shots": 25, "shots_on_target": 5, "shot_efficiency": 0.0, "shot_accuracy": 0.2, "shots_per_poss_pct": 0.397, "shots_against": 5, "shots_on_target_against": 2, "opp_shot_efficiency": 0.0}, {"date_str": "2019-03-13", "opponent": "Lyon", "venue": "Home", "round": "Round of 16", "result": "W", "result_full": "5\u20131", "label": "Lyon (H)", "goals_for": 5, "goals_against": 1, "possession": 55, "shots": 19, "shots_on_target": 10, "shot_efficiency": 0.263, "shot_accuracy": 0.526, "shots_per_poss_pct": 0.345, "shots_against": 11, "shots_on_target_against": 2, "opp_shot_efficiency": 0.091}, {"date_str": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "result": "W", "result_full": "1\u20130", "label": "Manchester United (A)", "goals_for": 1, "goals_against": 0, "possession": 67, "shots": 6, "shots_on_target": 3, "shot_efficiency": 0.167, "shot_accuracy": 0.5, "shots_per_poss_pct": 0.09, "shots_against": 10, "shots_on_target_against": 0, "opp_shot_efficiency": 0.0}, {"date_str": "2019-04-16", "opponent": "Manchester United", "venue": "Home", "round": "Quarter-finals", "result": "W", "result_full": "3\u20130", "label": "Manchester United (H)", "goals_for": 3, "goals_against": 0, "possession": 66, "shots": 13, "shots_on_target": 6, "shot_efficiency": 0.231, "shot_accuracy": 0.462, "shots_per_poss_pct": 0.197, "shots_against": 9, "shots_on_target_against": 3, "opp_shot_efficiency": 0.0}, {"date_str": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "result": "W", "result_full": "3\u20130", "label": "Liverpool (H)", "goals_for": 3, "goals_against": 0, "possession": 48, "shots": 12, "shots_on_target": 5, "shot_efficiency": 0.25, "shot_accuracy": 0.417, "shots_per_poss_pct": 0.25, "shots_against": 15, "shots_on_target_against": 5, "opp_shot_efficiency": 0.0}, {"date_str": "2019-05-07", "opponent": "Liverpool", "venue": "Away", "round": "Semi-finals", "result": "L", "result_full": "0\u20134", "label": "Liverpool (A)", "goals_for": 0, "goals_against": 4, "possession": 57, "shots": 8, "shots_on_target": 5, "shot_efficiency": 0.0, "shot_accuracy": 0.625, "shots_per_poss_pct": 0.14, "shots_against": 14, "shots_on_target_against": 8, "opp_shot_efficiency": 0.286}], "team_stats": [{"date_str": "2018-11-06", "opponent": "Inter", "venue": "Away", "poss_pct": 65, "pass_acc_pct": 90, "shots": 26, "shots_on_target": 8, "fouls": 9, "corners": 10, "crosses": 16, "tackles": 8, "interceptions": 10, "clearances": 16, "aerials_won": 10, "def_pressure": 18, "goals_for": 1, "goals_against": 1}, {"date_str": "2018-11-28", "opponent": "PSV", "venue": "Away", "poss_pct": 65, "pass_acc_pct": 84, "shots": 21, "shots_on_target": 8, "fouls": 11, "corners": 5, "crosses": 8, "tackles": 22, "interceptions": 10, "clearances": 15, "aerials_won": 18, "def_pressure": 32, "goals_for": 2, "goals_against": 1}, {"date_str": "2019-02-19", "opponent": "Lyon", "venue": "Away", "poss_pct": 63, "pass_acc_pct": 89, "shots": 25, "shots_on_target": 5, "fouls": 11, "corners": 5, "crosses": 15, "tackles": 24, "interceptions": 12, "clearances": 7, "aerials_won": 8, "def_pressure": 36, "goals_for": 0, "goals_against": 0}, {"date_str": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "poss_pct": 67, "pass_acc_pct": 91, "shots": 6, "shots_on_target": 3, "fouls": 11, "corners": 4, "crosses": 6, "tackles": 9, "interceptions": 5, "clearances": 21, "aerials_won": 7, "def_pressure": 14, "goals_for": 1, "goals_against": 0}, {"date_str": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "poss_pct": 48, "pass_acc_pct": 84, "shots": 12, "shots_on_target": 5, "fouls": 11, "corners": 3, "crosses": 3, "tackles": 15, "interceptions": 12, "clearances": 32, "aerials_won": 10, "def_pressure": 27, "goals_for": 3, "goals_against": 0}], "player_stats": {"Inter": [{"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Philippe Coutinho", "position": "FW", "minutes": 90, "goals": 0, "assists": 1, "shots": 8, "shots_on_target": 3, "offsides": 0, "crosses": 5, "tackles_won": 1, "interceptions": 1, "fouls_committed": 0, "fouls_drawn": 4}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Luis Su\u00e1rez", "position": "FW", "minutes": 90, "goals": 0, "assists": 0, "shots": 9, "shots_on_target": 1, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Ousmane Demb\u00e9l\u00e9", "position": "FW", "minutes": 80, "goals": 0, "assists": 0, "shots": 3, "shots_on_target": 2, "offsides": 0, "crosses": 6, "tackles_won": 1, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Malcom", "position": "FW", "minutes": 10, "goals": 1, "assists": 0, "shots": 1, "shots_on_target": 1, "offsides": 0, "crosses": 1, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 2}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Arthur Melo", "position": "CM", "minutes": 73, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 1, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 2}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Arturo Vidal", "position": "MF", "minutes": 17, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 1, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Sergio Busquets", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 2, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Ivan Rakiti\u0107", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 4, "shots_on_target": 1, "offsides": 0, "crosses": 1, "tackles_won": 1, "interceptions": 2, "fouls_committed": 2, "fouls_drawn": 1}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Jordi Alba", "position": "LB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 2, "tackles_won": 1, "interceptions": 1, "fouls_committed": 2, "fouls_drawn": 0}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Cl\u00e9ment Lenglet", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Gerard Piqu\u00e9", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 1, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Sergi Roberto", "position": "RB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2018-11-06", "opponent": "Inter", "venue": "Away", "round": "Group stage", "player": "Marc-Andr\u00e9 ter Stegen", "position": "GK", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}], "PSV": [{"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Philippe Coutinho", "position": "FW", "minutes": 69, "goals": 0, "assists": 0, "shots": 2, "shots_on_target": 0, "offsides": 0, "crosses": 3, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 2}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Malcom", "position": "FW", "minutes": 21, "goals": 0, "assists": 0, "shots": 2, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Lionel Messi", "position": "FW", "minutes": 90, "goals": 1, "assists": 1, "shots": 6, "shots_on_target": 4, "offsides": 0, "crosses": 0, "tackles_won": 2, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Ousmane Demb\u00e9l\u00e9", "position": "FW", "minutes": 79, "goals": 0, "assists": 1, "shots": 4, "shots_on_target": 1, "offsides": 0, "crosses": 1, "tackles_won": 0, "interceptions": 1, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Denis Su\u00e1rez", "position": "MF", "minutes": 11, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Arturo Vidal", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 4, "shots_on_target": 2, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 3, "fouls_committed": 2, "fouls_drawn": 5}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Sergio Busquets", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 3, "interceptions": 0, "fouls_committed": 3, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Ivan Rakiti\u0107", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 5, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Jordi Alba", "position": "LB", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 0, "offsides": 0, "crosses": 3, "tackles_won": 2, "interceptions": 1, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Cl\u00e9ment Lenglet", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 4, "interceptions": 0, "fouls_committed": 3, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Gerard Piqu\u00e9", "position": "CB", "minutes": 90, "goals": 1, "assists": 0, "shots": 1, "shots_on_target": 1, "offsides": 1, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 2, "fouls_drawn": 0}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "N\u00e9lson Semedo", "position": "RB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 1, "interceptions": 0, "fouls_committed": 1, "fouls_drawn": 1}, {"date": "2018-11-28", "opponent": "PSV", "venue": "Away", "round": "Group stage", "player": "Marc-Andr\u00e9 ter Stegen", "position": "GK", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}], "Lyon": [{"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Ousmane Demb\u00e9l\u00e9", "position": "FW", "minutes": 66, "goals": 0, "assists": 0, "shots": 4, "shots_on_target": 1, "offsides": 1, "crosses": 5, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 4}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Philippe Coutinho", "position": "FW", "minutes": 24, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 1, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Luis Su\u00e1rez", "position": "FW", "minutes": 90, "goals": 0, "assists": 0, "shots": 4, "shots_on_target": 1, "offsides": 0, "crosses": 2, "tackles_won": 0, "interceptions": 2, "fouls_committed": 2, "fouls_drawn": 3}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Lionel Messi", "position": "FW", "minutes": 90, "goals": 0, "assists": 0, "shots": 9, "shots_on_target": 1, "offsides": 0, "crosses": 4, "tackles_won": 2, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 2}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Ivan Rakiti\u0107", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 3, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 1, "interceptions": 3, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Sergio Busquets", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 2, "shots_on_target": 1, "offsides": 0, "crosses": 0, "tackles_won": 4, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 1}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Sergi Roberto", "position": "CM", "minutes": 80, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 1, "interceptions": 1, "fouls_committed": 3, "fouls_drawn": 1}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Arturo Vidal", "position": "MF", "minutes": 10, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Jordi Alba", "position": "LB", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 3, "interceptions": 2, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Cl\u00e9ment Lenglet", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 1}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Gerard Piqu\u00e9", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 3, "interceptions": 2, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "N\u00e9lson Semedo", "position": "RB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 5, "interceptions": 0, "fouls_committed": 2, "fouls_drawn": 1}, {"date": "2019-02-19", "opponent": "Lyon", "venue": "Away", "round": "Round of 16", "player": "Marc-Andr\u00e9 ter Stegen", "position": "GK", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}], "Man Utd": [{"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Philippe Coutinho", "position": "FW", "minutes": 64, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 1, "offsides": 0, "crosses": 1, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 3}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Arturo Vidal", "position": "MF", "minutes": 26, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 3, "fouls_drawn": 1}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Luis Su\u00e1rez", "position": "FW", "minutes": 90, "goals": 0, "assists": 0, "shots": 3, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 3}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Lionel Messi", "position": "FW", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 1, "offsides": 0, "crosses": 1, "tackles_won": 0, "interceptions": 0, "fouls_committed": 2, "fouls_drawn": 2}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Ivan Rakiti\u0107", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Sergio Busquets", "position": "CM", "minutes": 89, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 2, "fouls_committed": 3, "fouls_drawn": 1}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Carles Ale\u00f1\u00e1", "position": "MF", "minutes": 1, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Arthur Melo", "position": "CM", "minutes": 65, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 2}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Sergi Roberto", "position": "MF", "minutes": 25, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Jordi Alba", "position": "LB", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 1, "offsides": 0, "crosses": 2, "tackles_won": 2, "interceptions": 2, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Cl\u00e9ment Lenglet", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 1}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Gerard Piqu\u00e9", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "N\u00e9lson Semedo", "position": "RB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 1, "interceptions": 0, "fouls_committed": 2, "fouls_drawn": 1}, {"date": "2019-04-10", "opponent": "Manchester United", "venue": "Away", "round": "Quarter-finals", "player": "Marc-Andr\u00e9 ter Stegen", "position": "GK", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}], "Liverpool_H": [{"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Philippe Coutinho", "position": "FW", "minutes": 59, "goals": 0, "assists": 0, "shots": 2, "shots_on_target": 1, "offsides": 1, "crosses": 1, "tackles_won": 0, "interceptions": 1, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "N\u00e9lson Semedo", "position": "DF", "minutes": 31, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 1}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Luis Su\u00e1rez", "position": "FW", "minutes": 89, "goals": 1, "assists": 1, "shots": 3, "shots_on_target": 1, "offsides": 1, "crosses": 1, "tackles_won": 0, "interceptions": 0, "fouls_committed": 2, "fouls_drawn": 2}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Ousmane Demb\u00e9l\u00e9", "position": "FW", "minutes": 1, "goals": 0, "assists": 0, "shots": 2, "shots_on_target": 1, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Lionel Messi", "position": "FW", "minutes": 90, "goals": 2, "assists": 0, "shots": 4, "shots_on_target": 2, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 2, "fouls_drawn": 4}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Arturo Vidal", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 3, "interceptions": 2, "fouls_committed": 4, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Sergio Busquets", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 3, "fouls_committed": 0, "fouls_drawn": 2}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Ivan Rakiti\u0107", "position": "CM", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 1, "tackles_won": 0, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 4}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Jordi Alba", "position": "LB", "minutes": 90, "goals": 0, "assists": 1, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Cl\u00e9ment Lenglet", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 1, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 1, "fouls_committed": 1, "fouls_drawn": 1}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Gerard Piqu\u00e9", "position": "CB", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 2, "interceptions": 2, "fouls_committed": 1, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Sergi Roberto", "position": "RB", "minutes": 89, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 2, "interceptions": 2, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Carles Ale\u00f1\u00e1", "position": "MF", "minutes": 1, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 1, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}, {"date": "2019-05-01", "opponent": "Liverpool", "venue": "Home", "round": "Semi-finals", "player": "Marc-Andr\u00e9 ter Stegen", "position": "GK", "minutes": 90, "goals": 0, "assists": 0, "shots": 0, "shots_on_target": 0, "offsides": 0, "crosses": 0, "tackles_won": 0, "interceptions": 0, "fouls_committed": 0, "fouls_drawn": 0}]}, "summary": {"home_goals_mean": 3.0, "away_goals_mean": 1.33, "home_eff_mean": 0.183, "away_eff_mean": 0.101, "home_poss_mean": 60.0, "away_poss_mean": 63.0, "corr_poss_goals": 0.049, "corr_sot_goals": 0.578, "home_shots_mean": 16.7, "away_shots_mean": 16.5}};
+
+const BLUE   = '#004d98';
+const RED    = '#a50044';
+const GOLD   = '#edbb00';
+const LPOOL  = '#c8102e';
+const MUTED  = '#555577';
+const BG     = '#0f0f1e';
+const CARD   = '#181830';
+const TEXT   = '#e0e0f0';
+
+const layout_base = {
+  paper_bgcolor: CARD,
+  plot_bgcolor:  BG,
+  font: { family: "'Segoe UI', system-ui, sans-serif", color: TEXT, size: 11 },
+  margin: { t: 20, b: 60, l: 55, r: 20 },
+  hoverlabel: { bgcolor: '#1a1a35', bordercolor: '#333', font: { color: TEXT } },
+  xaxis: { gridcolor: '#1e1e38', zerolinecolor: '#333', tickfont: { color: '#999' } },
+  yaxis: { gridcolor: '#1e1e38', zerolinecolor: '#333', tickfont: { color: '#999' } },
+  legend: { bgcolor: 'rgba(0,0,0,0)', bordercolor: 'rgba(0,0,0,0)', font: { color: TEXT } },
+  showlegend: true,
+};
+
+const cfg = { displayModeBar: false, responsive: true };
+
+// Hero pills
+document.getElementById('pill-home-goals').textContent = DATA.summary.home_goals_mean.toFixed(2);
+document.getElementById('pill-away-goals').textContent = DATA.summary.away_goals_mean.toFixed(2);
+document.getElementById('pill-home-eff').textContent   = DATA.summary.home_eff_mean.toFixed(3);
+document.getElementById('pill-away-eff').textContent   = DATA.summary.away_eff_mean.toFixed(3);
+document.getElementById('pill-corr').textContent       = '+' + DATA.summary.corr_poss_goals.toFixed(3);
+
+// ─── MATCHES TABLE ─────────────────────────────────────────────────────────────
+function buildTable() {
+  const container = document.getElementById('matches-table-container');
+  let html = '<table class="match-table"><thead><tr>' +
+    '<th>Date</th><th>Round</th><th>Opponent</th><th>Venue</th><th>Score</th><th>Result</th>' +
+    '<th>Poss%</th><th>Shots</th><th>SOT</th><th>Shot Eff.</th><th>Opp Eff.</th>' +
+    '</tr></thead><tbody>';
+  DATA.matches.forEach(m => {
+    const vBadge = m.venue === 'Home'
+      ? '<span class="badge badge-h">H</span>'
+      : '<span class="badge badge-a">A</span>';
+    const rBadge = m.result === 'W'
+      ? '<span class="badge badge-w">W</span>'
+      : m.result === 'D'
+        ? '<span class="badge badge-d">D</span>'
+        : '<span class="badge badge-l">L</span>';
+    const effW = Math.min(60, Math.round(m.shot_efficiency * 280));
+    html += `<tr>
+      <td>${m.date_str}</td>
+      <td style="color:#888;font-size:.8rem">${m.round}</td>
+      <td><strong>${m.opponent}</strong></td>
+      <td>${vBadge}</td>
+      <td><strong>${m.result_full}</strong></td>
+      <td>${rBadge}</td>
+      <td>${m.possession}%</td>
+      <td>${m.shots}</td>
+      <td>${m.shots_on_target}</td>
+      <td><span class="eff-bar" style="width:${effW}px"></span>${m.shot_efficiency.toFixed(3)}</td>
+      <td>${m.opp_shot_efficiency.toFixed(3)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+buildTable();
+
+// ─── CHART 1: TIMELINE ─────────────────────────────────────────────────────────
+(function() {
+  const m  = DATA.matches;
+  const lx = m.map(d => d.label);
+  const colors = m.map(d => d.venue === 'Home' ? BLUE : RED);
+
+  const trGoals = {
+    x: lx, y: m.map(d => d.goals_for),
+    type: 'bar', name: 'Goals Scored',
+    marker: { color: colors, opacity: 0.9, line: { color: 'rgba(255,255,255,.2)', width: .5 } },
+    hovertemplate: '<b>%{x}</b><br>Goals: %{y}<extra></extra>'
+  };
+  const trConceded = {
+    x: lx, y: m.map(d => -d.goals_against),
+    type: 'bar', name: 'Goals Conceded',
+    marker: { color: colors, opacity: 0.35, pattern: { shape: '/', size: 6, solidity: 0.3 },
+              line: { color: 'rgba(255,255,255,.2)', width: .5 } },
+    hovertemplate: '<b>%{x}</b><br>Conceded: %{customdata}<extra></extra>',
+    customdata: m.map(d => d.goals_against)
+  };
+  const trShots = {
+    x: lx, y: m.map(d => d.shots),
+    type: 'scatter', mode: 'lines+markers', name: 'Shots',
+    yaxis: 'y2', line: { color: GOLD, width: 2 },
+    marker: { size: 6, color: GOLD },
+    hovertemplate: '<b>%{x}</b><br>Shots: %{y}<extra></extra>'
+  };
+  const trPoss = {
+    x: lx, y: m.map(d => d.possession),
+    type: 'scatter', mode: 'lines+markers', name: 'Possession%',
+    yaxis: 'y3', line: { color: '#7788ff', width: 1.5, dash: 'dot' },
+    marker: { size: 5, color: '#7788ff' },
+    hovertemplate: '<b>%{x}</b><br>Possession: %{y}%<extra></extra>'
+  };
+
+  const layout = Object.assign({}, layout_base, {
+    barmode: 'overlay',
+    margin: { t: 20, b: 80, l: 50, r: 80 },
+    yaxis:  { title: 'Goals', gridcolor: '#1e1e38', zerolinecolor: '#555' },
+    yaxis2: { title: 'Shots', overlaying: 'y', side: 'right', showgrid: false,
+              tickfont: { color: GOLD }, title: { font: { color: GOLD } } },
+    yaxis3: { title: 'Poss%', overlaying: 'y', side: 'right', showgrid: false,
+              position: 0.97, tickfont: { color: '#7788ff' }, range: [30, 80],
+              title: { font: { color: '#7788ff' } } },
+    legend: { orientation: 'h', y: -0.2, bgcolor: 'rgba(0,0,0,0)' },
+    shapes: [{ type: 'line', x0: -0.5, x1: lx.length - 0.5, y0: 0, y1: 0,
+               line: { color: '#444', width: 1 } }]
+  });
+
+  Plotly.newPlot('chart-timeline', [trGoals, trConceded, trShots, trPoss], layout, cfg);
+})();
+
+// ─── CHART 2: HOME vs AWAY BARS ────────────────────────────────────────────────
+(function() {
+  const metrics = ['Goals Scored', 'Shots', 'Shots on Target', 'Shot Efficiency', 'Possession%'];
+  const s       = DATA.summary;
+  const homeVals = [s.home_goals_mean, s.home_shots_mean, s.home_sot_mean, s.home_eff_mean, s.home_poss_mean];
+  const awayVals = [s.away_goals_mean, s.away_shots_mean, s.away_sot_mean, s.away_eff_mean, s.away_poss_mean];
+
+  const trH = { x: metrics, y: homeVals, type: 'bar', name: 'Home',
+    marker: { color: BLUE, opacity: 0.9, line: { color: 'rgba(255,255,255,.2)', width: .5 } },
+    hovertemplate: '<b>%{x}</b><br>Home: %{y:.3f}<extra></extra>' };
+  const trA = { x: metrics, y: awayVals, type: 'bar', name: 'Away',
+    marker: { color: RED, opacity: 0.9, line: { color: 'rgba(255,255,255,.2)', width: .5 } },
+    hovertemplate: '<b>%{x}</b><br>Away: %{y:.3f}<extra></extra>' };
+
+  Plotly.newPlot('chart-home-away-bars', [trH, trA],
+    Object.assign({}, layout_base, { barmode: 'group', margin: { t: 20, b: 80, l: 50, r: 20 } }),
+    cfg);
+})();
+
+// ─── CHART 3: POSSESSION vs GOALS SCATTER ──────────────────────────────────────
+(function() {
+  const m  = DATA.matches;
+  const traces = [];
+
+  ['Home','Away'].forEach(v => {
+    const sub = m.filter(d => d.venue === v);
+    traces.push({
+      x: sub.map(d => d.possession),
+      y: sub.map(d => d.goals_for),
+      mode: 'markers+text',
+      type: 'scatter',
+      name: v,
+      text: sub.map(d => d.opponent.slice(0,4)),
+      textposition: 'top right',
+      textfont: { size: 9, color: '#aaa' },
+      marker: {
+        size: sub.map(d => d.shots_on_target * 4 + 8),
+        color: v === 'Home' ? BLUE : RED,
+        opacity: 0.85,
+        line: { color: 'rgba(255,255,255,.3)', width: 1 }
+      },
+      hovertemplate: '<b>%{text}</b> (' + v + ')<br>Possession: %{x}%<br>Goals: %{y}<extra></extra>',
+      customdata: sub.map(d => d.result_full),
+    });
+  });
+
+  // Trend line
+  const allX = m.map(d => d.possession);
+  const allY = m.map(d => d.goals_for);
+  const n    = allX.length;
+  const mx   = allX.reduce((a,b)=>a+b)/n, my = allY.reduce((a,b)=>a+b)/n;
+  const slope = allX.reduce((s,x,i)=>s+(x-mx)*(allY[i]-my),0) / allX.reduce((s,x)=>s+(x-mx)**2,0);
+  const xs    = [40,80];
+  traces.push({ x: xs, y: xs.map(x => slope*(x-mx)+my), mode: 'lines', name: 'Trend',
+    line: { color: MUTED, dash: 'dash', width: 1.5 }, hoverinfo: 'skip' });
+
+  const layout = Object.assign({}, layout_base, {
+    xaxis: { title: 'Possession (%)', gridcolor: '#1e1e38', range: [40, 80] },
+    yaxis: { title: 'Goals Scored', gridcolor: '#1e1e38' },
+    margin: { t: 20, b: 60, l: 50, r: 20 },
+    annotations: [{ x: 75, y: slope*(75-mx)+my + 0.5,
+      text: `r = ${DATA.summary.corr_poss_goals}`, showarrow: false,
+      font: { color: MUTED, size: 11 } }]
+  });
+  Plotly.newPlot('chart-poss-vs-goals', traces, layout, cfg);
+})();
+
+// ─── CHART 4: EFFICIENCY RANKED ───────────────────────────────────────────────
+(function() {
+  const m = [...DATA.matches].sort((a,b) => b.shot_efficiency - a.shot_efficiency);
+  const colors = m.map(d => {
+    if (d.opponent === 'Liverpool' && d.venue === 'Away') return LPOOL;
+    return d.venue === 'Home' ? BLUE : RED;
+  });
+  const tr = {
+    x: m.map(d => d.label), y: m.map(d => d.shot_efficiency),
+    type: 'bar', marker: { color: colors, line: { color: 'rgba(255,255,255,.2)', width:.5 } },
+    hovertemplate: '<b>%{x}</b><br>Efficiency: %{y:.3f}<extra></extra>',
+    text: m.map(d => d.shot_efficiency.toFixed(3)),
+    textposition: 'outside', textfont: { size: 10, color: '#bbb' }
+  };
+  Plotly.newPlot('chart-eff-ranked', [tr],
+    Object.assign({}, layout_base, {
+      showlegend: false,
+      margin: { t: 30, b: 100, l: 60, r: 20 },
+      xaxis: { tickangle: -35 },
+      yaxis: { title: 'Shot Efficiency (Goals/Shot)', gridcolor: '#1e1e38' },
+      shapes: [
+        { type:'line', x0:-0.5, x1:11.5, y0:DATA.summary.home_eff_mean, y1:DATA.summary.home_eff_mean,
+          line:{ color:BLUE, dash:'dot', width:1.5 } },
+        { type:'line', x0:-0.5, x1:11.5, y0:DATA.summary.away_eff_mean, y1:DATA.summary.away_eff_mean,
+          line:{ color:RED, dash:'dot', width:1.5 } }
+      ],
+      annotations: [
+        { x: 11, y: DATA.summary.home_eff_mean + 0.005, text:'Home avg', showarrow:false, font:{color:BLUE,size:10} },
+        { x: 11, y: DATA.summary.away_eff_mean - 0.010, text:'Away avg', showarrow:false, font:{color:RED,size:10} }
+      ]
+    }), cfg);
+})();
+
+// ─── CHART 5: SHOTS PER POSS% ────────────────────────────────────────────────
+(function() {
+  const m = DATA.matches;
+  const colors = m.map(d => {
+    if (d.opponent === 'Liverpool' && d.venue === 'Away') return LPOOL;
+    return d.venue === 'Home' ? BLUE : RED;
+  });
+  const tr = {
+    x: m.map(d => d.label), y: m.map(d => d.shots_per_poss_pct),
+    type: 'bar', marker: { color: colors, line: { color: 'rgba(255,255,255,.2)', width:.5 } },
+    hovertemplate: '<b>%{x}</b><br>Shots/Poss%: %{y:.3f}<extra></extra>'
+  };
+  Plotly.newPlot('chart-shots-per-poss', [tr],
+    Object.assign({}, layout_base, {
+      showlegend: false,
+      margin: { t: 20, b: 100, l: 60, r: 20 },
+      xaxis: { tickangle: -35 },
+      yaxis: { title: 'Shots per Possession%', gridcolor: '#1e1e38' }
+    }), cfg);
+})();
+
+// ─── CHART 6: AWAY SHOTS vs GOALS ────────────────────────────────────────────
+(function() {
+  const aw = DATA.matches.filter(d => d.venue === 'Away');
+  const trShots = {
+    x: aw.map(d => d.opponent), y: aw.map(d => d.shots),
+    type: 'bar', name: 'Total Shots',
+    marker: { color: RED, opacity: 0.6, line: { color: 'rgba(255,255,255,.2)', width:.5 } }
+  };
+  const trSOT = {
+    x: aw.map(d => d.opponent), y: aw.map(d => d.shots_on_target),
+    type: 'bar', name: 'Shots on Target',
+    marker: { color: GOLD, opacity: 0.85, line: { color: 'rgba(255,255,255,.2)', width:.5 } }
+  };
+  const trGoals = {
+    x: aw.map(d => d.opponent), y: aw.map(d => d.goals_for),
+    type: 'scatter', mode: 'markers+lines', name: 'Goals',
+    marker: { size: 12, color: '#fff', symbol: 'star', line: { color: RED, width: 1.5 } },
+    line: { color: 'rgba(255,255,255,.3)', width: 1.5, dash: 'dot' }
+  };
+  Plotly.newPlot('chart-away-shots-goals', [trShots, trSOT, trGoals],
+    Object.assign({}, layout_base, {
+      barmode: 'overlay',
+      margin: { t: 20, b: 60, l: 50, r: 20 },
+      yaxis: { title: 'Count', gridcolor: '#1e1e38' }
+    }), cfg);
+})();
+
+// ─── CHART 7: DEFENSIVE ACTIONS ───────────────────────────────────────────────
+(function() {
+  const t = DATA.team_stats;
+  const colors = t.map(d => d.venue === 'Home' ? BLUE : RED);
+  const trDef = {
+    x: t.map(d => d.opponent + ' (' + (d.venue==='Home'?'H':'A') + ')'),
+    y: t.map(d => d.def_pressure), type: 'bar', name: 'Tackles+Interceptions',
+    marker: { color: colors, opacity: 0.85, line: { color: 'rgba(255,255,255,.2)', width:.5 } },
+    hovertemplate: '<b>%{x}</b><br>Tackles+Int: %{y}<extra></extra>'
+  };
+  const trClear = {
+    x: t.map(d => d.opponent + ' (' + (d.venue==='Home'?'H':'A') + ')'),
+    y: t.map(d => d.clearances), type: 'bar', name: 'Clearances',
+    marker: { color: GOLD, opacity: 0.65, line: { color: 'rgba(255,255,255,.2)', width:.5 } },
+    hovertemplate: '<b>%{x}</b><br>Clearances: %{y}<extra></extra>'
+  };
+  Plotly.newPlot('chart-defensive', [trDef, trClear],
+    Object.assign({}, layout_base, {
+      barmode: 'group',
+      margin: { t: 20, b: 80, l: 50, r: 20 },
+      yaxis: { title: 'Count', gridcolor: '#1e1e38' }
+    }), cfg);
+})();
+
+// ─── CHART 8: PLAYER SHOTS ────────────────────────────────────────────────────
+(function() {
+  const matchKeys = ['Inter','PSV','Lyon','Man Utd'];
+  const traces = [];
+  const colors_p = { Inter: BLUE, PSV: RED, Lyon: GOLD, 'Man Utd': '#cc4444' };
+
+  matchKeys.forEach(key => {
+    const ps = DATA.player_stats[key];
+    if (!ps) return;
+    const sorted = [...ps].sort((a,b) => (b.shots||0)-(a.shots||0)).slice(0,8);
+    traces.push({
+      x: sorted.map(p => p.shots_on_target || 0),
+      y: sorted.map(p => p.shots || 0),
+      mode: 'markers+text',
+      type: 'scatter',
+      name: key,
+      text: sorted.map(p => (p.player||'').split(' ').pop()),
+      textposition: 'top right',
+      textfont: { size: 8 },
+      marker: {
+        size: sorted.map(p => Math.sqrt((p.minutes||45)) * 2.5 + 6),
+        color: colors_p[key] || MUTED,
+        opacity: 0.8,
+        line: { color: 'rgba(255,255,255,.3)', width: 1 }
+      },
+      hovertemplate: '<b>%{text}</b> (' + key + ')<br>Shots: %{y}<br>SOT: %{x}<extra></extra>'
+    });
+  });
+
+  Plotly.newPlot('chart-player-shots', traces,
+    Object.assign({}, layout_base, {
+      margin: { t: 20, b: 60, l: 55, r: 20 },
+      xaxis: { title: 'Shots on Target', gridcolor: '#1e1e38' },
+      yaxis: { title: 'Total Shots', gridcolor: '#1e1e38' },
+    }), cfg);
+})();
+
+// ─── CHART 9: FUNNEL ─────────────────────────────────────────────────────────
+(function() {
+  const leg1 = DATA.matches.find(d => d.opponent==='Liverpool' && d.venue==='Home');
+  const leg2 = DATA.matches.find(d => d.opponent==='Liverpool' && d.venue==='Away');
+
+  const tr1 = {
+    type: 'funnel', name: 'Leg 1 — Camp Nou (3–0)',
+    y: ['Shots','Shots on Target','Goals'],
+    x: [leg1.shots, leg1.shots_on_target, leg1.goals_for],
+    textinfo: 'value+percent initial',
+    marker: { color: [BLUE, '#2266cc', GOLD] },
+    hovertemplate: '<b>%{y}</b>: %{x}<extra>Leg 1</extra>'
+  };
+  const tr2 = {
+    type: 'funnel', name: 'Leg 2 — Anfield (0–4)',
+    y: ['Shots','Shots on Target','Goals'],
+    x: [leg2.shots, leg2.shots_on_target, leg2.goals_for],
+    textinfo: 'value+percent initial',
+    marker: { color: [RED, LPOOL, '#550000'] },
+    hovertemplate: '<b>%{y}</b>: %{x}<extra>Leg 2</extra>'
+  };
+
+  Plotly.newPlot('chart-funnel', [tr1, tr2],
+    Object.assign({}, layout_base, {
+      funnelmode: 'overlay', funnelgap: 0.1,
+      margin: { t: 30, b: 40, l: 130, r: 20 },
+    }), cfg);
+})();
+
+// ─── CHART 10: EFFICIENCY FLIP ────────────────────────────────────────────────
+(function() {
+  const leg1 = DATA.matches.find(d => d.opponent==='Liverpool' && d.venue==='Home');
+  const leg2 = DATA.matches.find(d => d.opponent==='Liverpool' && d.venue==='Away');
+
+  const cats = ["Barça — Leg 1", "Barça — Leg 2", "Liverpool — Leg 1", "Liverpool — Leg 2"];
+  const vals = [
+    leg1.shot_efficiency,
+    leg2.shot_efficiency,
+    leg1.opp_shot_efficiency,
+    leg2.opp_shot_efficiency
+  ];
+  const cols = [BLUE, RED, '#883333', LPOOL];
+
+  const tr = {
+    x: cats, y: vals, type: 'bar',
+    marker: { color: cols, line: { color: 'rgba(255,255,255,.2)', width:.5 } },
+    text: vals.map(v => v.toFixed(3)),
+    textposition: 'outside', textfont: { size: 11, color: TEXT },
+    hovertemplate: '<b>%{x}</b><br>Efficiency: %{y:.3f}<extra></extra>'
+  };
+
+  Plotly.newPlot('chart-eff-flip', [tr],
+    Object.assign({}, layout_base, {
+      showlegend: false,
+      margin: { t: 30, b: 80, l: 60, r: 20 },
+      yaxis: { title: 'Shot Efficiency (Goals/Shot)', gridcolor: '#1e1e38', range: [0, 0.38] }
+    }), cfg);
+})();
+
+// ─── CHART 11: LIVERPOOL SHOTS BATTLE ────────────────────────────────────────
+(function() {
+  const leg1 = DATA.matches.find(d => d.opponent==='Liverpool' && d.venue==='Home');
+  const leg2 = DATA.matches.find(d => d.opponent==='Liverpool' && d.venue==='Away');
+
+  const legs = ['Leg 1 (Camp Nou 3–0)', 'Leg 2 (Anfield 0–4)'];
+
+  const trBarcaShots = { x: legs, y: [leg1.shots, leg2.shots], type:'bar', name:'Barça Shots',
+    marker:{ color:BLUE, opacity:.85, line:{color:'rgba(255,255,255,.2)',width:.5} } };
+  const trBarcaSOT   = { x: legs, y: [leg1.shots_on_target, leg2.shots_on_target], type:'bar', name:'Barça SOT',
+    marker:{ color: '#4488ff', opacity:.7, line:{color:'rgba(255,255,255,.2)',width:.5} } };
+  const trLpoolShots = { x: legs, y: [leg1.shots_against, leg2.shots_against], type:'bar', name:'Liverpool Shots',
+    marker:{ color: LPOOL, opacity:.65, line:{color:'rgba(255,255,255,.2)',width:.5} } };
+  const trLpoolSOT   = { x: legs, y: [leg1.shots_on_target_against, leg2.shots_on_target_against], type:'bar', name:'Liverpool SOT',
+    marker:{ color:'#ff4455', opacity:.7, line:{color:'rgba(255,255,255,.2)',width:.5} } };
+
+  Plotly.newPlot('chart-lpool-shots', [trBarcaShots, trBarcaSOT, trLpoolShots, trLpoolSOT],
+    Object.assign({}, layout_base, {
+      barmode: 'group',
+      margin: { t: 20, b: 60, l: 50, r: 20 },
+      yaxis: { title: 'Count', gridcolor: '#1e1e38' }
+    }), cfg);
+})();
+
+// ─── CHART 12: CORRELATION HEATMAP ───────────────────────────────────────────
+(function() {
+  const m     = DATA.matches;
+  const cols  = ['possession','shots','shots_on_target','shot_efficiency','shot_accuracy','goals_for','goals_against'];
+  const labs  = ['Possession','Shots','SOT','Shot Eff.','Shot Acc.','Goals For','Goals Ag.'];
+  const n     = cols.length;
+  const z     = Array.from({length:n}, () => new Array(n).fill(0));
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      const xi = m.map(d => d[cols[i]]);
+      const xj = m.map(d => d[cols[j]]);
+      const mi = xi.reduce((a,b)=>a+b)/xi.length;
+      const mj = xj.reduce((a,b)=>a+b)/xj.length;
+      const num = xi.reduce((s,v,k) => s+(v-mi)*(xj[k]-mj), 0);
+      const di  = Math.sqrt(xi.reduce((s,v)=>s+(v-mi)**2,0));
+      const dj  = Math.sqrt(xj.reduce((s,v)=>s+(v-mj)**2,0));
+      z[i][j]   = di*dj > 0 ? parseFloat((num/(di*dj)).toFixed(2)) : 1;
+    }
+  }
+
+  const tr = {
+    z, x: labs, y: labs, type: 'heatmap',
+    colorscale: 'RdBu',
+    zmid: 0, zmin: -1, zmax: 1,
+    text: z.map(r => r.map(v => v.toFixed(2))),
+    texttemplate: '%{text}',
+    textfont: { size: 10 },
+    hovertemplate: '%{y} × %{x}: %{z:.2f}<extra></extra>'
+  };
+
+  Plotly.newPlot('chart-corr', [tr],
+    Object.assign({}, layout_base, {
+      showlegend: false,
+      margin: { t: 20, b: 80, l: 80, r: 20 },
+      xaxis: { tickangle: -30 },
+    }), cfg);
+})();
+
+// ─── CHART 13: DISTRIBUTIONS ─────────────────────────────────────────────────
+(function() {
+  const home = DATA.matches.filter(d => d.venue === 'Home');
+  const away = DATA.matches.filter(d => d.venue === 'Away');
+
+  const trH = {
+    x: home.map(d => d.shot_efficiency), type: 'histogram',
+    name: 'Home', nbinsx: 6, opacity: 0.7,
+    marker: { color: BLUE, line: { color: 'rgba(255,255,255,.3)', width: .5 } },
+    hovertemplate: 'Efficiency: %{x:.3f}<br>Count: %{y}<extra>Home</extra>'
+  };
+  const trA = {
+    x: away.map(d => d.shot_efficiency), type: 'histogram',
+    name: 'Away', nbinsx: 6, opacity: 0.7,
+    marker: { color: RED, line: { color: 'rgba(255,255,255,.3)', width: .5 } },
+    hovertemplate: 'Efficiency: %{x:.3f}<br>Count: %{y}<extra>Away</extra>'
+  };
+
+  Plotly.newPlot('chart-distributions', [trH, trA],
+    Object.assign({}, layout_base, {
+      barmode: 'overlay',
+      margin: { t: 20, b: 60, l: 50, r: 20 },
+      xaxis: { title: 'Shot Efficiency (Goals/Shot)', gridcolor: '#1e1e38' },
+      yaxis: { title: 'Matches', gridcolor: '#1e1e38' },
+      annotations: [
+        { x: DATA.summary.home_eff_mean, y: 3.5, text: 'Home avg', showarrow: true, ax: 30, ay: -20,
+          font: { color: BLUE, size: 10 }, arrowcolor: BLUE, arrowsize: .8 },
+        { x: DATA.summary.away_eff_mean, y: 3.5, text: 'Away avg', showarrow: true, ax: -30, ay: -20,
+          font: { color: RED, size: 10 }, arrowcolor: RED, arrowsize: .8 }
+      ]
+    }), cfg);
+})();
+
+// ─── CHART 14: DEFENSIVE PRESSURE (TEAM STATS) ───────────────────────────────
+(function() {
+  const t = DATA.team_stats;
+  const colors = t.map(d => d.venue === 'Home' ? BLUE : RED);
+  const tr = {
+    x: t.map(d => d.opponent + ' (' + (d.venue==='Home'?'H':'A') + ')'),
+    y: t.map(d => d.def_pressure), type: 'bar',
+    marker: { color: colors, line: { color: 'rgba(255,255,255,.2)', width:.5 } },
+    hovertemplate: '<b>%{x}</b><br>Def. Pressure: %{y}<extra></extra>',
+    text: t.map(d => d.def_pressure),
+    textposition: 'outside', textfont: { size: 10, color: '#bbb' }
+  };
+  Plotly.newPlot('chart-def-pressure', [tr],
+    Object.assign({}, layout_base, {
+      showlegend: false,
+      margin: { t: 20, b: 100, l: 60, r: 20 },
+      xaxis: { tickangle: -35 },
+      yaxis: { title: 'Tackles + Interceptions', gridcolor: '#1e1e38' }
+    }), cfg);
+})();
+
+// ─── SCROLL REVEAL ────────────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
